@@ -16,3 +16,6 @@ mkdir frontend
 cd frontend
 npx create-react-app .
 
+# Electron Setup
+npm install electron
+
