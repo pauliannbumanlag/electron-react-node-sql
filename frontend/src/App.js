@@ -1,23 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import '.App.css';
 
 function App() {
+  const [users, setUsers] = useState([]);
+  const [newUserName, setNewUserName] = useState('');
+
+  useEffect(() => {
+    fetch('/api/users')
+      .then(response => response.json())
+      .then(data => setUsers(data))
+      .catch(error => console.error('Error fetching users:', error));   
+  }, []);
+
+  const handleAddUser = () => {
+    fetch('/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: newUserName }),
+    })
+      .then(response => response.json())
+      .then(data => setUsers([...users, { id: data.id, name: newUserName }]))
+      .catch(error => console.error('Erro adding user:', error));
+
+    setNewUserName('');
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Users</h1>
+      <ul>
+        {users.map(user => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+      <div>
+        <input
+          type="text"
+          value={newUserName}
+          onChange={e => setNewUserName(e.target.value)}
+        />
+        <button onClick={handleAddUser}>Add User</button>
+      </div>
     </div>
   );
 }
