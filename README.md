@@ -19,3 +19,10 @@ npx create-react-app .
 # Electron Setup
 npm install electron
 
+# Run the Application
+In the project root, start the Node.js server:
+node server.js
+
+In another terminal, start the React frontend:
+cd frontend
+npm start
